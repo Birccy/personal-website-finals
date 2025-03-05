@@ -140,6 +140,19 @@
     font-family: 'Open Sans', sans-serif;
     font-size: 1.1em;
     transition: background 0.3s ease, transform 0.2s ease;
+    box-sizing: border-box; /* Ensures padding doesn't cause overflow */
+    resize: none; /* Prevents textarea from resizing unexpectedly */
+  }
+
+  .comment-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .comment-form form {
+    width: 100%;
+    max-width: 500px; /* Prevents excessive stretching on larger screens */
   }
   
   .comment-form input:focus,
