@@ -2,7 +2,7 @@
     <section class="hero">
       <div class="container">
         <p class="greeting">Hi, I am</p>
-        <h1 class="typing-effect">Ric Brian P. Boado</h1> <!-- Correct name as placeholder -->
+        <h1 class="typing-effect">Ric Brian P. Boado</h1>
         <p class="tagline">Cybersecurity Student & Aspiring PMA Cadet</p>
         <div class="social-links">
           <a href="https://www.linkedin.com/in/ric-brian-boado/" target="_blank">
