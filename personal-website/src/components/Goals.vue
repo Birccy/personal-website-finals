@@ -1,7 +1,7 @@
 <template>
   <section id="goals" class="section fade-in dark-section">
     <div class="container">
-      <h2>Life Goals</h2>
+      <h2>Current Life Goals</h2>
       <div class="timeline">
         <div v-for="goal in goals" :key="goal.date" class="timeline-item">
           <div class="timeline-date">{{ goal.date }}</div>

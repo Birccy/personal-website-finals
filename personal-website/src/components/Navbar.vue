@@ -13,7 +13,7 @@
           </ul>
         </div>
       </nav>
-      
+  
       <!-- Button to toggle navbar position -->
       <button class="toggle-btn" @click="toggleNavbar">
         <span v-if="!isMoved">⬆️</span>
@@ -46,7 +46,7 @@
   <style scoped>
   /* Navbar styling */
   .navbar {
-    background-color: #121212; /* Dark background for the navbar */
+    background: linear-gradient(90deg, #121212, #1a1a1a); /* Gradient background */
     padding: 20px 0;
     position: fixed;
     width: 100%;
@@ -79,11 +79,21 @@
     text-decoration: none;
     letter-spacing: 2px;
     transition: color 0.3s ease, transform 0.3s ease;
+    animation: float 3s ease-in-out infinite; /* Subtle floating animation */
   }
   
   .logo:hover {
     color: #1db954; /* Green color on hover */
     transform: scale(1.1);
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
   }
   
   .nav-menu {
@@ -102,11 +112,13 @@
     color: #ddd;
     text-decoration: none;
     padding: 10px;
-    transition: color 0.3s ease, transform 0.3s ease;
+    transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+    border-radius: 5px;
   }
   
   .nav-menu a:hover {
     color: #fff;
+    background-color: rgba(255, 255, 255, 0.1); /* Light background on hover */
     transform: translateY(-3px); /* Slight upward movement on hover */
   }
   
@@ -126,8 +138,9 @@
     transition: transform 0.3s ease, background-color 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     position: fixed;
-    bottom: 60px; /* Moved the button higher */
+    bottom: 100px; /* Moved the button higher */
     right: 20px; /* Keep it on the right */
+    z-index: 1000; /* Ensure it's above other elements */
   }
   
   .toggle-btn:hover {
@@ -139,4 +152,3 @@
     outline: none;
   }
   </style>
-  

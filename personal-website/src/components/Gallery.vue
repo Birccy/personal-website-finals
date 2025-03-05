@@ -4,7 +4,7 @@
         <h2>Some of My Memorable Moments</h2>
         <div class="gallery-grid">
           <div v-for="image in images" :key="image.id" class="gallery-item" @click="openLightbox(image)">
-            <img :src="image.url" :alt="image.caption">
+            <img :src="image.url" :alt="image.caption" class="gallery-img">
             <div class="image-caption">{{ image.caption }}</div>
           </div>
         </div>
@@ -12,7 +12,7 @@
         <!-- Lightbox -->
         <div v-if="showLightbox" class="lightbox" @click.self="showLightbox = false">
           <div class="lightbox-content">
-            <span class="close" @click="showLightbox = false">&times;</span>
+            <span class="close" @click="showLightbox = false" @mouseover="hoverClose" @mouseleave="leaveClose">&times;</span>
             <img :src="selectedImage.url" :alt="selectedImage.caption" class="lightbox-image">
             <p class="lightbox-caption">{{ selectedImage.caption }}</p>
           </div>
@@ -41,17 +41,22 @@
       openLightbox(image) {
         this.selectedImage = image;
         this.showLightbox = true;
+      },
+      hoverClose(event) {
+        event.target.style.transform = 'scale(1.2)';
+        event.target.style.transition = 'transform 0.2s ease-in-out';
+      },
+      leaveClose(event) {
+        event.target.style.transform = 'scale(1)';
       }
     }
   }
   </script>
-
-
   
   <style scoped>
   /* Dark Theme Background */
   #gallery {
-    background: #0a192f; /* Dark navy blue */
+    background: #0a192f;
     padding: 80px 0;
     text-align: center;
   }
@@ -100,11 +105,11 @@
     cursor: pointer;
   }
   
-  .gallery-item img {
+  .gallery-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    display: block;
   }
   
   .gallery-item:hover {
@@ -123,12 +128,6 @@
     font-size: 1.1em;
     font-weight: 600;
     text-align: center;
-    transition: background 0.3s ease;
-  }
-  
-  .gallery-item:hover .image-caption {
-    background: rgba(100, 255, 218, 0.8);
-    color: #0a192f;
   }
   
   /* Lightbox */
@@ -138,12 +137,12 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.9);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    animation: fadeIn 0.3s ease-in-out;
+    padding: 20px;
   }
   
   .lightbox-content {
@@ -152,11 +151,8 @@
     max-height: 80%;
     background: #121212;
     border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
     padding: 20px;
     text-align: center;
-    animation: zoomIn 0.3s ease-in-out;
   }
   
   /* Close Button */
@@ -164,49 +160,25 @@
     position: absolute;
     top: 10px;
     right: 15px;
-    font-size: 2em;
-    color: #fff;
+    font-size: 3em;
+    color: #ff6b6b;
     cursor: pointer;
-    transition: color 0.3s ease;
+    font-weight: bold;
+    z-index: 1100;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: transform 0.2s ease-in-out;
   }
   
   .close:hover {
-    color: #ff6b6b;
+    color: #ff4040;
+    transform: scale(1.2);
   }
   
-  /* Lightbox Image */
   .lightbox-image {
-    width: 100%;
-    height: auto;
-    max-height: 500px;
+    max-width: 90%;
+    max-height: 80vh;
     object-fit: contain;
   }
-  
-  /* Lightbox Caption */
-  .lightbox-caption {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1.2em;
-    color: #ccd6f6;
-    margin-top: 15px;
-  }
-  
-  /* Animations */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  @keyframes zoomIn {
-    from {
-      transform: scale(0.9);
-    }
-    to {
-      transform: scale(1);
-    }
-  }
   </style>
-  
