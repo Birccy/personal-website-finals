@@ -18,6 +18,10 @@
     line-height: 1.6;
     color: var(--primary-color);
   }
+
+  body {
+  overflow-x: hidden; /* Prevent horizontal overflow */
+}
   
   .container {
     max-width: 1200px;
