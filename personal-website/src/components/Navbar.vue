@@ -6,7 +6,7 @@
           <ul class="nav-menu">
             <li><a @click="smoothScroll('#about')">About</a></li>
             <li><a @click="smoothScroll('#education')">Education</a></li>
-            <li><a @click="smoothScroll('#experience')">Experience</a></li>
+            <li><a @click="smoothScroll('#portfolio')">Experience</a></li>
             <li><a @click="smoothScroll('#goals')">Goals</a></li>
             <li><a @click="smoothScroll('#gallery')">Gallery</a></li>
             <li><a @click="smoothScroll('#comments')">Comments</a></li>
@@ -116,7 +116,7 @@
   
   /* Button to toggle navbar position */
   .toggle-btn {
-    background-color: #1db954; /* Green button color */
+    background-color: #137fd8; /* Green button color */
     color: #fff;
     border: none;
     padding: 12px 18px;

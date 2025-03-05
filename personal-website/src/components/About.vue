@@ -4,14 +4,14 @@
         <h2>About Me</h2>
         <div class="about-grid">
           <!-- Profile Section (Profile Image on Left) -->
-          <div class="about-card">
+          <div class="profile-section">
             <div class="profile-img-wrapper">
               <img :src="profileImg" :alt="name" class="profile-img" />
             </div>
           </div>
   
           <!-- Info Section (Personal Info and Interests) -->
-          <div class="about-card">
+          <div class="info-section">
             <h3>👨‍💻 Personal Info</h3>
             <p><strong>Name:</strong> {{ name }}</p>
             <p>Currently studying <strong>{{ degree }}</strong> at {{ college }}, {{ year }}.</p>
@@ -19,10 +19,11 @@
   
             <h3>🎯 Interests</h3>
             <ul class="interests-list">
-              <li><a href="https://www.miniclip.com/games/en/" target="_blank" class="interest-link">🎮 Video Games</a></li>
-              <li><a href="https://github.com" target="_blank" class="interest-link">💻 Coding Projects</a></li>
-              <li><a href="https://www.funimation.com" target="_blank" class="interest-link">📺 Anime & Animation</a></li>
-              <li><a href="https://www.pma.edu.ph/" target="_blank" class="interest-link">⚔️ Military Strategy</a></li>
+              <li v-for="(interest, index) in interests" :key="index">
+                <a :href="interestLinks[index]" target="_blank" class="interest-link">
+                  {{ interestIcons[index] }} {{ interest }}
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -31,107 +32,156 @@
   </template>
   
   <script>
-    export default {
-      data() {
-        return {
-          name: "Ric Brian P. Boado",
-          profileImg: "https://i.postimg.cc/BjhDX0kQ/FB-IMG-1733983675126.jpg",
-          degree: "BS Computer Science (Cybersecurity & Forensics)",
-          college: "Asia Pacific College (APC)",
-          year: "2nd year",
-          academicAchievements: "Consistent honor/high honor student from elementary to college.",
-          interests: ["Video Games", "Coding Projects", "Anime & Animation", "Military Strategy"]
-        };
-      }
-    };
+  export default {
+    data() {
+      return {
+        name: "Ric Brian P. Boado",
+        profileImg: "https://i.postimg.cc/BjhDX0kQ/FB-IMG-1733983675126.jpg",
+        degree: "BS Computer Science (Cybersecurity & Forensics)",
+        college: "Asia Pacific College (APC)",
+        year: "2nd year",
+        academicAchievements: "Consistent honor/high honor student from elementary to college.",
+        interests: ["Video Games", "Coding Projects", "Anime & Animation", "Military Strategy"],
+        interestIcons: ["🎮", "💻", "📺", "⚔️"],
+        interestLinks: [
+          "https://www.miniclip.com/games/en/",
+          "https://github.com",
+          "https://www.funimation.com",
+          "https://www.pma.edu.ph/"
+        ]
+      };
+    }
+  };
   </script>
   
   <style scoped>
   /* About section styles */
   #about {
-    background-color: #f4f4f4;
-    padding: 60px 0;
+    background: #0a192f; /* Dark navy background */
+    padding: 100px 0;
+    color: #ccd6f6;
+    overflow: hidden;
   }
   
   .container {
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 20px;
-    border-radius: 8px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   
   h2 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.5em;
+    margin-bottom: 40px;
     text-align: center;
+    color: #64ffda; /* Teal accent color */
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    position: relative;
+  }
+  
+  h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #64ffda;
+    margin: 10px auto 0;
   }
   
   .about-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
+    gap: 40px;
+    align-items: center;
   }
   
-  .about-card {
-    background-color: rgba(255, 255, 255, 0.8);
-    color: #333;
+  .profile-section {
+    flex: 1 1 40%;
+    position: relative;
+  }
+  
+  .profile-img-wrapper {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    border: 5px solid #64ffda;
+    box-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .profile-img-wrapper:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(100, 255, 218, 0.8);
+  }
+  
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .info-section {
+    flex: 1 1 50%;
     padding: 20px;
-    border-radius: 8px;
-    flex: 1 1 45%;  /* Adjusted for side-by-side layout */
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2em;
     margin-bottom: 20px;
+    color: #64ffda;
   }
   
-  .about-card h3 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.5em;
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
-  .about-card p {
+  p {
     font-family: 'Open Sans', sans-serif;
     font-size: 1.1em;
     margin: 10px 0;
+    color: #ccd6f6;
   }
   
-  .about-card strong {
-    color: #4CAF50;
+  strong {
+    color: #64ffda;
   }
   
   .interests-list {
     list-style: none;
     padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
   }
   
   .interests-list li {
     font-family: 'Open Sans', sans-serif;
     font-size: 1.1em;
-    margin: 8px 0;
-    color: #333;
+    background: rgba(100, 255, 218, 0.1);
+    padding: 10px 15px;
+    border-radius: 25px;
+    border: 1px solid rgba(100, 255, 218, 0.2);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  
+  .interests-list li:hover {
+    background: rgba(100, 255, 218, 0.2);
+    transform: translateY(-5px);
   }
   
   .interest-link {
-    color: #4CAF50;
+    color: #64ffda;
     text-decoration: none;
-    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   
   .interest-link:hover {
-    color: #ff6b6b; /* Add hover effect to interest links */
-  }
-  
-  .profile-img-wrapper {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .profile-img {
-    width: 100%;  /* Full width box */
-    height: 500px;  /* Fixed height */
-    object-fit: cover; /* Ensures the image covers the area */
-    border-radius: 8px; /* Optional: round the corners of the image */
+    color: #ccd6f6;
   }
   </style>
-  

@@ -1,7 +1,8 @@
 <template>
     <section class="hero">
       <div class="container">
-        <h1>Ric Brian P. Boado</h1>
+        <p class="greeting">Hi, I am</p>
+        <h1 class="typing-effect">Ric Brian P. Boado</h1> <!-- Correct name as placeholder -->
         <p class="tagline">Cybersecurity Student & Aspiring PMA Cadet</p>
         <div class="social-links">
           <a href="https://www.linkedin.com/in/ric-brian-boado/" target="_blank">
@@ -22,15 +23,12 @@
   </template>
   
   <style scoped>
-  /* Hero section styles */
   .hero {
-    background: linear-gradient(to right, #000000, #2a2a2a, #121212); /* Dark space-like gradient */
+    background: linear-gradient(to right, #000000, #2a2a2a, #121212);
     padding: 100px 0;
     text-align: center;
     color: #fff;
     border-bottom: 5px solid #fff;
-    background-size: cover;
-    background-position: center;
   }
   
   .container {
@@ -39,11 +37,36 @@
     margin: 0 auto;
   }
   
-  h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 3.5em;
+  .greeting {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.5em;
     margin-bottom: 10px;
+    font-weight: 300;
+    color: #ddd;
+  }
+  
+  .typing-effect {
+    font-family: 'Courier New', Courier, monospace; /* Monospace for accurate width */
+    font-size: 3.5em;
+    margin: 0 auto 10px;
     font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    position: relative;
+    border-right: 4px solid #fff;
+    animation: typing 3s steps(18) 1s forwards, blink-caret 0.75s step-end infinite;
+  }
+  
+  /* Adjusted width to fit "Ric Brian P. Boado" (18 characters) */
+  @keyframes typing {
+    0% { width: 0; }
+    100% { width: 19ch; } /* Increased width slightly to avoid clipping */
+  }
+  
+  @keyframes blink-caret {
+    50% { border-color: transparent; }
   }
   
   .tagline {
@@ -74,3 +97,12 @@
   }
   </style>
   
+  <script>
+  export default {
+    mounted() {
+      // No need to manually set textContent anymore
+    }
+  };
+  </script>
+  
+
