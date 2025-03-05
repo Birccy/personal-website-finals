@@ -2,10 +2,10 @@
   <div>
     <nav class="navbar" :class="{'navbar-move': isMoved, 'mobile-open': isMobileOpen}">
       <div class="container">
-        <a href="javascript:void(0);" class="logo" @click="scrollToTop">RB</a>
+        <a href="#" class="logo" @click.prevent="scrollToTop">RB</a>
         
         <!-- Hamburger menu button for mobile -->
-        <button class="hamburger" @click="toggleMobileMenu">
+        <button class="hamburger" @click="toggleMobileMenu" aria-label="Toggle menu">
           <span :class="{'open': isMobileOpen}"></span>
           <span :class="{'open': isMobileOpen}"></span>
           <span :class="{'open': isMobileOpen}"></span>
@@ -23,9 +23,9 @@
     </nav>
 
     <!-- Button to toggle navbar position -->
-    <button class="toggle-btn" @click="toggleNavbar">
+    <button class="toggle-btn" @click="toggleNavbar" aria-label="Toggle navigation">
       <span v-if="!isMoved">⬆️</span>
-      <span v-if="isMoved">⬇️</span>
+      <span v-else>⬇️</span>
     </button>
   </div>
 </template>
@@ -42,12 +42,21 @@ export default {
     smoothScroll(target) {
       const element = document.querySelector(target);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const offset = 80; // Navbar height
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({
+          top: elementPosition - offset,
+          behavior: 'smooth'
+        });
       }
       this.isMobileOpen = false;
     },
     scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.isMoved = false; // Reset navbar position
+      window.scrollTo({ 
+        top: 0, 
+        behavior: 'smooth' 
+      });
       this.isMobileOpen = false;
     },
     toggleNavbar() {
@@ -55,26 +64,59 @@ export default {
     },
     toggleMobileMenu() {
       this.isMobileOpen = !this.isMobileOpen;
+      if (this.isMobileOpen) {
+        document.addEventListener('click', this.handleClickOutside);
+      } else {
+        document.removeEventListener('click', this.handleClickOutside);
+      }
+    },
+    handleClickOutside(event) {
+      if (!this.$el.contains(event.target)) {
+        this.isMobileOpen = false;
+        document.removeEventListener('click', this.handleClickOutside);
+      }
+    },
+    handleResize() {
+      if (window.innerWidth > 768) {
+        this.isMobileOpen = false;
+      }
     }
+  },
+  mounted() {
+    window.addEventListener('resize', this.handleResize);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize);
+    document.removeEventListener('click', this.handleClickOutside);
   }
 };
 </script>
 
 <style scoped>
+:root {
+  --nav-height: 80px;
+  --bg-color: #121212;
+  --accent-color: #1db954;
+}
+
+html {
+  scroll-padding-top: var(--nav-height);
+}
+
 .navbar {
-  background: linear-gradient(90deg, #121212, #1a1a1a);
-  padding: 20px 0;
+  background: linear-gradient(90deg, var(--bg-color), #1a1a1a);
+  height: var(--nav-height);
   position: fixed;
   width: 100%;
   top: 0;
   z-index: 999;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  transition: top 0.6s ease-in-out, transform 0.6s ease-in-out;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
 .navbar-move {
-  top: -100%;
-  transform: translateY(-100px);
+  transform: translateY(-100%);
 }
 
 .container {
@@ -82,113 +124,121 @@ export default {
   justify-content: space-between;
   align-items: center;
   max-width: 1200px;
+  height: 100%;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 2rem;
 }
 
 .logo {
-  font-size: 2.5em;
-  font-weight: bold;
+  font-size: 2.5rem;
+  font-weight: 700;
   color: #fff;
   text-decoration: none;
   letter-spacing: 2px;
-  transition: color 0.3s ease, transform 0.3s ease;
-  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .logo:hover {
-  color: #1db954;
-  transform: scale(1.1);
+  color: var(--accent-color);
 }
 
 .nav-menu {
-  list-style: none;
   display: flex;
-  gap: 30px;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-menu a {
-  font-size: 1.1em;
   color: #ddd;
   text-decoration: none;
-  padding: 10px;
-  transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
-  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .nav-menu a:hover {
   color: #fff;
-  background-color: rgba(255, 255, 255, 0.1);
-  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
-/* Toggle button */
 .toggle-btn {
-  background-color: #137fd8;
+  background: #137fd8;
   color: #fff;
   border: none;
-  padding: 12px 18px;
-  font-size: 1.2em;
-  cursor: pointer;
+  padding: 0.8rem 1.2rem;
   border-radius: 8px;
-  transition: transform 0.3s ease, background-color 0.3s ease;
   position: fixed;
   bottom: 100px;
   right: 20px;
   z-index: 1000;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .toggle-btn:hover {
+  background: #1aaf47;
   transform: scale(1.1);
-  background-color: #1aaf47;
 }
 
-/* Mobile Menu */
 .hamburger {
   display: none;
   background: none;
   border: none;
+  padding: 0.5rem;
   cursor: pointer;
-  flex-direction: column;
-  gap: 5px;
+  z-index: 1000;
 }
 
 .hamburger span {
   display: block;
   width: 30px;
   height: 3px;
-  background: white;
-  transition: transform 0.4s ease-in-out;
+  background: #fff;
+  transition: all 0.3s ease;
+  transform-origin: center;
 }
 
-.hamburger .open:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
+.hamburger span:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.hamburger .open:first-child {
+  transform: translateY(8px) rotate(45deg);
 }
 
 .hamburger .open:nth-child(2) {
   opacity: 0;
 }
 
-.hamburger .open:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
+.hamburger .open:last-child {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 @media (max-width: 768px) {
   .hamburger {
-    display: flex;
+    display: block;
   }
+  
   .nav-menu {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 60px;
+    position: fixed;
+    top: var(--nav-height);
     left: 0;
-    width: 100%;
-    background: #1a1a1a;
-    padding: 20px;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    background: var(--bg-color);
+    padding: 2rem;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
   }
+  
   .nav-menu.mobile-show {
-    display: flex;
+    transform: translateX(0);
   }
 }
 </style>
