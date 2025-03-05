@@ -2,7 +2,7 @@
   <div>
     <nav class="navbar" :class="{'navbar-move': isMoved, 'mobile-open': isMobileOpen}">
       <div class="container">
-        <a href="#" class="logo" @click="scrollToTop">RB</a>
+        <a href="javascript:void(0);" class="logo" @click="scrollToTop">RB</a>
         
         <!-- Hamburger menu button for mobile -->
         <button class="hamburger" @click="toggleMobileMenu">
@@ -47,7 +47,7 @@ export default {
       this.isMobileOpen = false;
     },
     scrollToTop() {
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       this.isMobileOpen = false;
     },
     toggleNavbar() {
