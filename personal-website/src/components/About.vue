@@ -36,7 +36,7 @@
     data() {
       return {
         name: "Ric Brian P. Boado",
-        profileImg: "https://i.postimg.cc/BjhDX0kQ/FB-IMG-1733983675126.jpg",
+        profileImg: '/images/my1andonlyphoto.jpg',
         degree: "BS Computer Science (Cybersecurity & Forensics)",
         college: "Asia Pacific College (APC)",
         year: "2nd year",
