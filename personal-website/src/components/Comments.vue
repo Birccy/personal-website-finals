@@ -13,9 +13,9 @@
         </div>
   
         <div class="comment-list">
-          <div v-for="(comment, index) in comments" :key="index" class="comment-card">
+          <div v-for="comment in comments" :key="comment.id" class="comment-card">
             <h3>{{ comment.name }}</h3>
-            <p class="comment-date">{{ comment.date }}</p>
+            <p class="comment-date">{{ formatDate(comment.created_at) }}</p>
             <p>{{ comment.comment }}</p>
           </div>
         </div>
@@ -24,38 +24,75 @@
   </template>
   
   <script>
+  import { supabase } from "../supabase"; // Import Supabase instance
+  
   export default {
     data() {
       return {
-        formData: { name: '', comment: '' },
+        formData: { name: "", comment: "" },
         comments: [],
         loading: false,
       };
     },
     methods: {
-      submitComment() {
-        if (this.formData.name && this.formData.comment) {
-          this.loading = true;
-          
-          setTimeout(() => {
-            this.comments.unshift({
-              name: this.formData.name,
-              comment: this.formData.comment,
-              date: new Date().toLocaleString(),
-            });
-            localStorage.setItem('comments', JSON.stringify(this.comments));
-            this.formData = { name: '', comment: '' };
-            this.loading = false;
-          }, 500); // Simulated loading effect
+      // Fetch comments from Supabase
+      async fetchComments() {
+        const { data, error } = await supabase
+          .from("comments")
+          .select("*")
+          .order("created_at", { ascending: false });
+  
+        if (error) {
+          console.error("Error fetching comments:", error);
+        } else {
+          this.comments = data;
         }
       },
-    },
-    mounted() {
-      const storedComments = localStorage.getItem('comments');
-      if (storedComments) {
-        this.comments = JSON.parse(storedComments);
+  
+      // Submit a new comment to Supabase
+      async submitComment() {
+        if (!this.formData.name || !this.formData.comment) return;
+  
+        this.loading = true;
+  
+        const { error } = await supabase
+          .from("comments")
+          .insert([
+            { 
+              name: this.formData.name, 
+              comment: this.formData.comment 
+            }
+          ]);
+  
+        if (error) {
+          console.error("Error adding comment:", error);
+        } else {
+          this.formData = { name: "", comment: "" };
+          this.fetchComments(); // Refresh the comment list
+        }
+  
+        this.loading = false;
+      },
+  
+      // Format date for display
+      formatDate(dateString) {
+        return new Date(dateString).toLocaleString();
+      },
+  
+      // Listen for real-time changes in Supabase
+      async listenForComments() {
+        supabase
+          .channel("comments")
+          .on("postgres_changes", { event: "*", schema: "public", table: "comments" }, () => {
+            this.fetchComments();
+          })
+          .subscribe();
       }
     },
+    async mounted() {
+      this.fetchComments();
+      this.listenForComments();
+    }
   };
   </script>
   

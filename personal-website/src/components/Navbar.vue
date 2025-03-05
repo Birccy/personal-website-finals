@@ -116,7 +116,7 @@
   
   /* Button to toggle navbar position */
   .toggle-btn {
-    background-color: #137fd8; /* Green button color */
+    background-color: #137fd8; /* Blue button */
     color: #fff;
     border: none;
     padding: 12px 18px;
@@ -126,8 +126,8 @@
     transition: transform 0.3s ease, background-color 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     position: fixed;
-    bottom: 20px;
-    right: 20px; /* Position the button at the bottom right of the screen */
+    bottom: 60px; /* Moved the button higher */
+    right: 20px; /* Keep it on the right */
   }
   
   .toggle-btn:hover {
