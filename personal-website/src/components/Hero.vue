@@ -53,16 +53,16 @@
   color: #fff;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 100%;
-  display: inline-block;
+  width: 0;
   border-right: 4px solid #fff;
-  animation: typing 3s steps(18) 1s forwards, blink-caret 0.75s step-end infinite;
+  display: inline-block;
+  animation: typing 3s steps(21, end) 1s forwards, blink-caret 0.75s step-end infinite;
 }
 
 /* Typing effect animation */
 @keyframes typing {
   0% { width: 0; }
-  100% { width: max-content; }
+  100% { width: 21ch; } /* Dynamically matches character count */
 }
 
 @keyframes blink-caret {
@@ -99,7 +99,7 @@
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .typing-effect {
-    font-size: 2em; /* Slightly smaller for better fitting */
+    font-size: 2em; /* Smaller font for better mobile display */
     border-right: 3px solid #fff; /* Adjust caret size */
   }
 }
