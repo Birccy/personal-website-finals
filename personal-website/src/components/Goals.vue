@@ -169,26 +169,19 @@ h2::after {
 /* Responsive Design */
 @media (max-width: 768px) {
   .timeline::before {
-    left: 20px; /* Move line to the left */
-    height: calc(100% - 40px); /* Adjusted height */
-    top: 20px; /* Align with the first item */
+    display: none; /* Hide the vertical line on mobile */
+  }
+
+  .timeline-item::before {
+    display: none; /* Hide the circles on mobile */
   }
 
   .timeline-item {
     width: 100%;
     align-self: center !important;
     text-align: left;
-    padding-left: 40px;
-    margin-left: 20px; /* Add margin to avoid overlapping */
-  }
-
-  .timeline-item::before {
-    left: -8px; /* Adjusted for mobile */
-    right: auto; /* Reset right positioning */
-  }
-
-  .timeline-item:nth-child(even)::before {
-    left: -8px; /* Adjusted for mobile */
+    padding-left: 20px;
+    margin-left: 0; /* Remove margin */
   }
 }
 </style>

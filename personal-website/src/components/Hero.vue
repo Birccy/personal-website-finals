@@ -1,5 +1,5 @@
 <template>
-  <section class="hero">
+  <section id="hero" class="hero">
     <div class="container">
       <p class="greeting">Hi, I am</p>
       <h1 class="typing-effect">Ric Brian P. Boado</h1>
