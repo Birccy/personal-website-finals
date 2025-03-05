@@ -2,7 +2,7 @@
   <div>
     <nav class="navbar" :class="{'navbar-move': isMoved, 'mobile-open': isMobileOpen}">
       <div class="container">
-        <a href="javascript:void(0);" class="logo" @click="scrollToTop">RB</a>
+        <a href="javascript:void(0);" class="logo" @click="scrollToHero">RB</a>
         
         <!-- Hamburger menu button for mobile -->
         <button class="hamburger" @click="toggleMobileMenu">
@@ -46,11 +46,11 @@ export default {
       }
       this.isMobileOpen = false;
     },
-    scrollToTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+    scrollToHero() {
+      const heroSection = document.querySelector('#hero'); // Target the hero section
+      if (heroSection) {
+        heroSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
       this.isMobileOpen = false;
     },
     toggleNavbar() {

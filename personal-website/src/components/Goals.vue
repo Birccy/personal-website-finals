@@ -82,7 +82,7 @@ h2::after {
 .timeline {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px; /* Increased gap for better spacing */
   position: relative;
 }
 
@@ -91,9 +91,10 @@ h2::after {
   position: absolute;
   left: 50%;
   width: 4px;
-  height: 100%;
+  height: calc(100% - 40px); /* Adjusted height to avoid overlapping */
   background: rgba(100, 255, 218, 0.5);
   transform: translateX(-50%);
+  top: 20px; /* Adjusted to align with the first item */
 }
 
 /* Timeline Items */
@@ -149,33 +150,45 @@ h2::after {
   content: '';
   position: absolute;
   top: 50%;
-  left: 100%;
   width: 16px;
   height: 16px;
   background: #64ffda;
   border-radius: 50%;
   transform: translateY(-50%);
+  z-index: 2; /* Ensure circles are above the line */
+}
+
+.timeline-item:nth-child(odd)::before {
+  right: -28px; /* Adjusted to align with the line */
 }
 
 .timeline-item:nth-child(even)::before {
-  left: -20px;
+  left: -28px; /* Adjusted to align with the line */
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .timeline::before {
-    left: 20px;
+    left: 20px; /* Move line to the left */
+    height: calc(100% - 40px); /* Adjusted height */
+    top: 20px; /* Align with the first item */
   }
-  
+
   .timeline-item {
     width: 100%;
     align-self: center !important;
     text-align: left;
     padding-left: 40px;
+    margin-left: 20px; /* Add margin to avoid overlapping */
   }
 
   .timeline-item::before {
-    left: 10px;
+    left: -8px; /* Adjusted for mobile */
+    right: auto; /* Reset right positioning */
+  }
+
+  .timeline-item:nth-child(even)::before {
+    left: -8px; /* Adjusted for mobile */
   }
 }
 </style>
