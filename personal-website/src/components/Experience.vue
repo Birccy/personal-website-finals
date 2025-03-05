@@ -94,9 +94,9 @@
                   <p>🚧 More coding projects coming soon!</p>
                   <p>I'm currently expanding my skills in:</p>
                   <ul>
-                    <li>  React.js</li>
-                    <li>  Node.js</li>
-                    <li>  TypeScript</li>
+                    <li>React.js</li>
+                    <li>Node.js</li>
+                    <li>TypeScript</li>
                   </ul>
                 </div>
               </div>
@@ -107,174 +107,184 @@
     </section>
   </template>
   
-  <style scoped>
-  /* Base Reset */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Background and Container */
-  #portfolio {
-    background: #0a192f; /* Dark navy background */
-    padding: 100px 0;
-    color: #ccd6f6;
-    overflow: hidden;
-  }
-  
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-  
+<style scoped>
+/* Base Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Background and Container */
+#portfolio {
+  background: #0a192f; /* Dark navy background */
+  padding: 100px 0;
+  color: #ccd6f6;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 3.5em;
+  margin-bottom: 40px;
+  text-align: center;
+  color: #64ffda; /* Teal accent color */
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  position: relative;
+}
+
+h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: #64ffda;
+  margin: 10px auto 0;
+}
+
+/* Portfolio Grid Layout */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.portfolio-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 25px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.portfolio-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #64ffda;
+}
+
+/* Project Gallery */
+.project-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.project-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  aspect-ratio: 16/9;
+  transition: transform 0.3s ease;
+}
+
+.project-item:hover {
+  transform: scale(1.05);
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Skills List */
+.skills-list {
+  list-style: none;
+  padding: 0;
+}
+
+.skills-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.1em;
+  color: #ccd6f6;
+}
+
+.skills-list li::before {
+  content: '▹';
+  margin-right: 10px;
+  color: #64ffda;
+}
+
+/* Coming Soon Section */
+.coming-soon {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border-left: 4px solid #ffe66d;
+}
+
+.coming-soon p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.1em;
+  color: #ccd6f6;
+}
+
+.coming-soon p:first-child {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #ffe66d;
+}
+
+/* Fix for the "Expanding Skills" list */
+.coming-soon ul {
+  padding-left: 20px; /* Add padding to the left of the list */
+  margin-left: 10px; /* Optional: Add margin to the left of the list */
+}
+
+.coming-soon li {
+  list-style-position: inside; /* Ensure bullets are inside the padding */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   h2 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 3.5em;
-    margin-bottom: 40px;
-    text-align: center;
-    color: #64ffda; /* Teal accent color */
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    position: relative;
+    font-size: 2.5rem;
   }
-  
-  h2::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 4px;
-    background: #64ffda;
-    margin: 10px auto 0;
-  }
-  
-  /* Portfolio Grid Layout */
+
   .portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: 1fr;
   }
-  
-  .portfolio-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 25px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .portfolio-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  }
-  
-  h3 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 2em;
-    margin-bottom: 20px;
-    color: #64ffda;
-  }
-  
-  /* Project Gallery */
+
   .project-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
-  
-  .project-item {
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    aspect-ratio: 16/9;
-    transition: transform 0.3s ease;
-  }
-  
-  .project-item:hover {
-    transform: scale(1.05);
-  }
-  
-  .project-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  
-  video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .project-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    text-align: center;
-    font-size: 0.9rem;
-  }
-  
-  /* Skills List */
-  .skills-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .skills-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1.1em;
-    color: #ccd6f6;
-  }
-  
-  .skills-list li::before {
-    content: '▹';
-    margin-right: 10px;
-    color: #64ffda;
-  }
-  
-  /* Coming Soon Section */
-  .coming-soon {
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border-left: 4px solid #ffe66d;
-  }
-  
-  .coming-soon p {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1.1em;
-    color: #ccd6f6;
-  }
-  
-  .coming-soon p:first-child {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-    color: #ffe66d;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    h2 {
-      font-size: 2.5rem;
-    }
-  
-    .portfolio-grid {
-      grid-template-columns: 1fr;
-    }
-  
-    .project-gallery {
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
-  }
-  </style>
+}
+</style>
