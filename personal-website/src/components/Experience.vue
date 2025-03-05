@@ -94,9 +94,9 @@
                   <p>🚧 More coding projects coming soon!</p>
                   <p>I'm currently expanding my skills in:</p>
                   <ul>
-                    <li>React.js</li>
-                    <li>Node.js</li>
-                    <li>TypeScript</li>
+                    <li>  React.js</li>
+                    <li>  Node.js</li>
+                    <li>  TypeScript</li>
                   </ul>
                 </div>
               </div>
