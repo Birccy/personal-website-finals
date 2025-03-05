@@ -47,7 +47,7 @@
 
 .typing-effect {
   font-family: 'Courier New', Courier, monospace;
-  font-size: clamp(2em, 5vw, 3.5em); /* Responsive font size */
+  font-size: clamp(2em, 5vw, 3.5em);
   margin: 0 auto 10px;
   font-weight: 700;
   color: #fff;
@@ -56,13 +56,13 @@
   width: 0;
   border-right: 4px solid #fff;
   display: inline-block;
-  animation: typing 3s steps(21, end) 1s forwards, blink-caret 0.75s step-end infinite;
+  animation: typing 3s steps(19, end) 1s forwards, blink-caret 0.75s step-end infinite;
 }
 
-/* Typing effect animation */
+/* Fixed width to exactly match character count */
 @keyframes typing {
   0% { width: 0; }
-  100% { width: 21ch; } /* Dynamically matches character count */
+  100% { width: 18.5ch; } /* Exact character count of "Ric Brian P. Boado" */
 }
 
 @keyframes blink-caret {
@@ -99,8 +99,8 @@
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .typing-effect {
-    font-size: 2em; /* Smaller font for better mobile display */
-    border-right: 3px solid #fff; /* Adjust caret size */
+    font-size: 2em;
+    border-right: 3px solid #fff;
   }
 }
 </style>
