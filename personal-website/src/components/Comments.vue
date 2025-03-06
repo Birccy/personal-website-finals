@@ -2,7 +2,7 @@
   <section id="comments" class="section fade-in dark-section">
     <div class="container">
       <h2>Leave a Message</h2>
-      
+
       <div class="comment-form">
         <form @submit.prevent="submitComment">
           <input 
@@ -10,13 +10,11 @@
             v-model="formData.name" 
             placeholder="Your Name" 
             required 
-            class="animated-input"
           />
           <textarea 
             v-model="formData.comment" 
             placeholder="Your Message" 
-            required 
-            class="animated-input"
+            required
           ></textarea>
           <button type="submit" :disabled="loading">
             {{ loading ? "Posting..." : "Post Comment" }}
@@ -24,16 +22,12 @@
         </form>
       </div>
 
-      <!-- Error message -->
-      <p v-if="error" class="error">{{ error }}</p>
-
-      <!-- Comments List -->
       <div class="comment-list">
         <div v-if="commentsLoading" class="loading">Loading comments...</div>
         <div v-else>
           <div v-for="comment in comments" :key="comment.id" class="comment-card">
             <h3>{{ comment.name }}</h3>
-            <p class="comment-date">{{ formatDate(comment.created_at) }}</p>
+            <p class="comment-date">{{ formatDate(comment.date) }}</p>
             <p class="comment-content">{{ comment.comment }}</p>
           </div>
           <div v-if="comments.length === 0" class="no-comments">
@@ -60,20 +54,18 @@ export default {
   },
   methods: {
     async fetchComments() {
-      console.log("Fetching comments...");
       this.commentsLoading = true;
-      this.error = null; // Reset error message
       try {
         const { data, error } = await supabase
           .from("comments")
           .select("*")
-          .order("created_at", { ascending: false });
+          .order("date", { ascending: false });
 
         if (error) throw error;
-        console.log("Fetched comments:", data);
+        console.log("✅ Comments fetched:", data); // Debugging log
         this.comments = data;
       } catch (error) {
-        console.error("Error fetching comments:", error.message);
+        console.error("❌ Error fetching comments:", error.message);
         this.error = "Failed to load comments. Please try again later.";
       } finally {
         this.commentsLoading = false;
@@ -82,24 +74,20 @@ export default {
 
     async submitComment() {
       if (!this.formData.name || !this.formData.comment) return;
-      
+
       this.loading = true;
-      this.error = null; // Reset error
       try {
-        const { data, error } = await supabase
-          .from("comments")
-          .insert([{ 
-            name: this.formData.name, 
-            comment: this.formData.comment,
-            created_at: new Date().toISOString()
-          }]);
+        const { error } = await supabase.from("comments").insert([{
+          name: this.formData.name,
+          comment: this.formData.comment,
+        }]);
 
         if (error) throw error;
-        
-        console.log("Comment posted:", data);
-        this.formData = { name: "", comment: "" }; // Clear inputs
+
+        this.formData = { name: "", comment: "" };
+        await this.fetchComments(); // Refresh comments after submission
       } catch (error) {
-        console.error("Error adding comment:", error.message);
+        console.error("❌ Error adding comment:", error.message);
         this.error = "Failed to post comment. Please try again.";
       } finally {
         this.loading = false;
@@ -107,7 +95,7 @@ export default {
     },
 
     formatDate(dateString) {
-      return new Date(dateString).toLocaleString('en-US', {
+      return new Date(dateString).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -123,10 +111,7 @@ export default {
           event: '*',
           schema: 'public',
           table: 'comments',
-        }, (payload) => {
-          console.log("New comment received:", payload);
-          this.fetchComments(); // Refresh comments when a new one is added
-        })
+        }, () => this.fetchComments())
         .subscribe();
     }
   },
@@ -138,13 +123,14 @@ export default {
 </script>
 
 <style scoped>
-/* Layout */
+/* Dark theme styling */
 #comments {
   background-color: #1a1a1a;
   padding: 4rem 0;
   min-height: 100vh;
 }
 
+/* Container */
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -152,9 +138,10 @@ export default {
   background: rgba(25, 25, 25, 0.95);
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  overflow: hidden; /* Prevent content from expanding outside */
 }
 
-/* Headings */
+/* Title */
 h2 {
   color: #fff;
   font-size: 2.5rem;
@@ -163,12 +150,13 @@ h2 {
   font-weight: 500;
 }
 
-/* Form Styling */
+/* Form styling */
 .comment-form {
   margin-bottom: 3rem;
 }
 
-.animated-input {
+/* Input and Textarea */
+input, textarea {
   width: 100%;
   padding: 1rem;
   margin: 0.5rem 0;
@@ -177,18 +165,20 @@ h2 {
   border-radius: 8px;
   color: #fff;
   font-size: 1rem;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.2s ease;
+  box-sizing: border-box; /* Prevents width from overflowing */
 }
 
-/* Input Animation */
-.animated-input:focus {
+/* Animation for focus */
+input:focus, textarea:focus {
   outline: none;
   border-color: #646cff;
-  background: rgba(100, 108, 255, 0.1);
-  transform: scale(1.05);
+  background: rgba(100, 108, 255, 0.05);
+  box-shadow: 0 0 10px rgba(100, 108, 255, 0.5);
+  transform: scale(1.01); /* Slight scale without overflowing */
 }
 
-/* Button Styling */
+/* Button */
 button {
   background: linear-gradient(45deg, #646cff, #9b4dff);
   color: white;
@@ -210,11 +200,12 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Comments List */
+/* Comments list */
 .comment-list {
   margin-top: 2rem;
 }
 
+/* Comment card */
 .comment-card {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 12px;
@@ -230,19 +221,21 @@ button:disabled {
   font-weight: 600;
 }
 
+/* Date styling */
 .comment-date {
   color: #888;
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
 
+/* Comment content */
 .comment-content {
   color: #ccc;
   line-height: 1.6;
   margin: 0;
 }
 
-/* Error and Loading */
+/* Loading & No Comments */
 .loading, .no-comments {
   color: #888;
   text-align: center;
@@ -250,6 +243,7 @@ button:disabled {
   font-style: italic;
 }
 
+/* Error message */
 .error {
   color: #ff4444;
   text-align: center;
