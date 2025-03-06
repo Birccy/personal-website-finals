@@ -2,16 +2,32 @@
   <section id="comments" class="section fade-in dark-section">
     <div class="container">
       <h2>Leave a Message</h2>
+      
       <div class="comment-form">
         <form @submit.prevent="submitComment">
-          <input type="text" v-model="formData.name" placeholder="Your Name" required />
-          <textarea v-model="formData.comment" placeholder="Your Message" required></textarea>
+          <input 
+            type="text" 
+            v-model="formData.name" 
+            placeholder="Your Name" 
+            required 
+            class="animated-input"
+          />
+          <textarea 
+            v-model="formData.comment" 
+            placeholder="Your Message" 
+            required 
+            class="animated-input"
+          ></textarea>
           <button type="submit" :disabled="loading">
             {{ loading ? "Posting..." : "Post Comment" }}
           </button>
         </form>
       </div>
 
+      <!-- Error message -->
+      <p v-if="error" class="error">{{ error }}</p>
+
+      <!-- Comments List -->
       <div class="comment-list">
         <div v-if="commentsLoading" class="loading">Loading comments...</div>
         <div v-else>
@@ -44,7 +60,9 @@ export default {
   },
   methods: {
     async fetchComments() {
+      console.log("Fetching comments...");
       this.commentsLoading = true;
+      this.error = null; // Reset error message
       try {
         const { data, error } = await supabase
           .from("comments")
@@ -52,9 +70,10 @@ export default {
           .order("created_at", { ascending: false });
 
         if (error) throw error;
+        console.log("Fetched comments:", data);
         this.comments = data;
       } catch (error) {
-        console.error("Error fetching comments:", error);
+        console.error("Error fetching comments:", error.message);
         this.error = "Failed to load comments. Please try again later.";
       } finally {
         this.commentsLoading = false;
@@ -63,25 +82,24 @@ export default {
 
     async submitComment() {
       if (!this.formData.name || !this.formData.comment) return;
-
+      
       this.loading = true;
+      this.error = null; // Reset error
       try {
-        const { error } = await supabase.from("comments").insert([
-          {
-            name: this.formData.name,
+        const { data, error } = await supabase
+          .from("comments")
+          .insert([{ 
+            name: this.formData.name, 
             comment: this.formData.comment,
-          },
-        ]);
+            created_at: new Date().toISOString()
+          }]);
 
         if (error) throw error;
-
-        // Reset form
-        this.formData = { name: "", comment: "" };
-
-        // Fetch updated comments
-        await this.fetchComments();
+        
+        console.log("Comment posted:", data);
+        this.formData = { name: "", comment: "" }; // Clear inputs
       } catch (error) {
-        console.error("Error adding comment:", error);
+        console.error("Error adding comment:", error.message);
         this.error = "Failed to post comment. Please try again.";
       } finally {
         this.loading = false;
@@ -89,7 +107,7 @@ export default {
     },
 
     formatDate(dateString) {
-      return new Date(dateString).toLocaleDateString('en-US', {
+      return new Date(dateString).toLocaleString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -100,14 +118,15 @@ export default {
 
     listenForComments() {
       supabase
-        .channel("comments-channel")
-        .on(
-          "postgres_changes",
-          { event: "INSERT", schema: "public", table: "comments" },
-          (payload) => {
-            this.comments.unshift(payload.new); // Add new comment at the top
-          }
-        )
+        .channel('comments-channel')
+        .on('postgres_changes', {
+          event: '*',
+          schema: 'public',
+          table: 'comments',
+        }, (payload) => {
+          console.log("New comment received:", payload);
+          this.fetchComments(); // Refresh comments when a new one is added
+        })
         .subscribe();
     }
   },
@@ -119,6 +138,7 @@ export default {
 </script>
 
 <style scoped>
+/* Layout */
 #comments {
   background-color: #1a1a1a;
   padding: 4rem 0;
@@ -127,7 +147,6 @@ export default {
 
 .container {
   max-width: 800px;
-  width: 90%;
   margin: 0 auto;
   padding: 2rem;
   background: rgba(25, 25, 25, 0.95);
@@ -135,6 +154,7 @@ export default {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
+/* Headings */
 h2 {
   color: #fff;
   font-size: 2.5rem;
@@ -143,17 +163,13 @@ h2 {
   font-weight: 500;
 }
 
+/* Form Styling */
 .comment-form {
-  width: 100%;
-  max-width: 600px;
-  margin: auto;
   margin-bottom: 3rem;
 }
 
-input, textarea {
+.animated-input {
   width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
   padding: 1rem;
   margin: 0.5rem 0;
   background: rgba(255, 255, 255, 0.05);
@@ -161,16 +177,18 @@ input, textarea {
   border-radius: 8px;
   color: #fff;
   font-size: 1rem;
-  transition: all 0.3s ease, transform 0.1s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
-input:focus, textarea:focus {
+/* Input Animation */
+.animated-input:focus {
   outline: none;
   border-color: #646cff;
   background: rgba(100, 108, 255, 0.1);
-  transform: scale(1.02);
+  transform: scale(1.05);
 }
 
+/* Button Styling */
 button {
   background: linear-gradient(45deg, #646cff, #9b4dff);
   color: white;
@@ -192,6 +210,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* Comments List */
 .comment-list {
   margin-top: 2rem;
 }
@@ -223,6 +242,7 @@ button:disabled {
   margin: 0;
 }
 
+/* Error and Loading */
 .loading, .no-comments {
   color: #888;
   text-align: center;
