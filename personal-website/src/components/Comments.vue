@@ -66,13 +66,20 @@ export default {
 
       this.loading = true;
       try {
-        const { error } = await supabase.from("comments").insert([{
-          name: this.formData.name,
-          comment: this.formData.comment,
-        }]);
+        const { error } = await supabase.from("comments").insert([
+          {
+            name: this.formData.name,
+            comment: this.formData.comment,
+          },
+        ]);
 
         if (error) throw error;
+
+        // Reset form
         this.formData = { name: "", comment: "" };
+
+        // Fetch updated comments
+        await this.fetchComments();
       } catch (error) {
         console.error("Error adding comment:", error);
         this.error = "Failed to post comment. Please try again.";
@@ -93,12 +100,14 @@ export default {
 
     listenForComments() {
       supabase
-        .channel('comments-channel')
-        .on('postgres_changes', {
-          event: '*',
-          schema: 'public',
-          table: 'comments',
-        }, () => this.fetchComments())
+        .channel("comments-channel")
+        .on(
+          "postgres_changes",
+          { event: "INSERT", schema: "public", table: "comments" },
+          (payload) => {
+            this.comments.unshift(payload.new); // Add new comment at the top
+          }
+        )
         .subscribe();
     }
   },
@@ -118,6 +127,7 @@ export default {
 
 .container {
   max-width: 800px;
+  width: 90%;
   margin: 0 auto;
   padding: 2rem;
   background: rgba(25, 25, 25, 0.95);
@@ -134,11 +144,16 @@ h2 {
 }
 
 .comment-form {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
   margin-bottom: 3rem;
 }
 
 input, textarea {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 1rem;
   margin: 0.5rem 0;
   background: rgba(255, 255, 255, 0.05);
@@ -146,13 +161,14 @@ input, textarea {
   border-radius: 8px;
   color: #fff;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease, transform 0.1s ease-in-out;
 }
 
 input:focus, textarea:focus {
   outline: none;
   border-color: #646cff;
-  background: rgba(100, 108, 255, 0.05);
+  background: rgba(100, 108, 255, 0.1);
+  transform: scale(1.02);
 }
 
 button {
